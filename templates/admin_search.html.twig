@@ -1,0 +1,72 @@
+{% extends "base.html.twig" %}
+
+{# this is just an example for how to use mdl-grid #}
+{% block content %}
+  <div class="page-content">
+    <!-- styling -->
+    <style>
+      .chart-card {
+        width: 100%;
+      }
+
+      .chart {
+        height: 400px;
+      }
+
+      .pending {
+        margin: auto;
+      }
+    </style>
+
+    <!-- html code -->
+    <div class="mdl-grid">
+      <div class="mdl-cell chart-card mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+          <h2 class="mdl-card__title-text">Database Search</h2>
+        </div>
+        {%if results %}
+        <div class="mdl-card__supporting-text">
+          <h6>{{count}} tuples found</h6>
+          <table class="mdl-data-table mdl-js-data-table pending">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th class="mdl-data-table__cell--non-numeric">Name</th>
+                <th class="mdl-data-table__cell--non-numeric">Email</th>
+                <th class="mdl-data-table__cell--non-numeric">DOB</th>
+                <th class="mdl-data-table__cell--non-numeric">City</th>
+                <th class="mdl-data-table__cell--non-numeric">State</th>
+                <th>Total Money</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for r in results %}
+              <tr>
+                <td><a href="{{url('user_profile', {id: r['ID']})}}">{{r['ID']}}</a></td>
+                <td class="mdl-data-table__cell--non-numeric">{{r['NAME']}}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{r['EMAIL_ADDRESS']}}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{r['DOB']}}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{r['ADDRESS_CITY']}}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{r['ADDRESS_STATE']}}</td>
+                <td>${{r['MONEY']}}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="mdl-card__supporting-text">
+          <form action="" method="GET">
+            <div class="mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" name="q"></input>
+              <label class="mdl-textfield__label" for="comment_text">Text lines...</label>
+            </div>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit">
+              Submit
+            </button>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
