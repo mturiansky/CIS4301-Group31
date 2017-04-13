@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{# this is just an example for how to use mdl-grid #}
+{% block content %}
+
+<h1>{{userID['NAME']}}'s ten most recent transactions</h1>
+<table class="mdl-data-table mdl-js-data-table">
+  <thead>
+    <tr>
+      <th class="mdl-data-table__cell--non-numeric">Date of transaction</th>
+      <th class="mdl-data-table__cell--non-numeric">Transaction type</th>
+      <th>Value</th>
+      <th>Transaction ID</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for top in topTen %}
+ <tr>
+      <td class="mdl-data-table__cell--non-numeric">{{top['TIMESTAMP']}}</td>
+      <td class="mdl-data-table__cell--non-numeric">{{top['TYPE']}}</td>
+      <td>{{top['VALUE']}}</td>
+      <td>{{top['ID']}}</td>
+   </tr>
+{% endfor %}
+    
+  </tbody>
+</table>
+{% endblock %}

@@ -41,12 +41,15 @@
       <!-- main navigation for website -->
       <div class="mdl-layout__drawer">
         <span class="mdl-layout-title">Banking App</span>
+	<a class="mdl-navigation__link"  href="{{ url('user_home') }}">Homepage</a>
+	<a class="mdl-navigation__link"  href="{{ url('user_timeline')}}>News feed</a>
         <nav class="mdl-navigation">
           {% if not global.user %}
             <a class="mdl-navigation__link" href="{{ url('login') }}">Login</a>
           {% else %}
             <a class="mdl-navigation__link" href="{{ url('admin_logout') }}">Logout</a>
           {% endif %}
+	
         </nav>
       </div>
 
