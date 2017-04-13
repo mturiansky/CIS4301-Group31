@@ -1,0 +1,71 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+  <style>
+    .card {
+      width: 100%;
+      margin: auto;
+    }
+
+    .pending {
+      margin: auto;
+    }
+  </style>
+  <div class="page-content">
+    <div class="mdl-cell card mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Post Information</h2>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <p>Timestamp: {{tid['TSTAMP']}}</p>
+        <p><a href="{{url('user_profile', {id: tid['FROMACCID']})}}">From: {{tid['FROMACC']}}</a></p>
+        <p><a href="{{url('user_profile', {id: tid['TOACCID']})}}">To: {{tid['TOACC']}}</a></p>
+        <p>Memo: {{tid['MEMO']}}</p>
+        <p>Text: {{tid['TEXT']}}</p>
+        <p>Value: {{tid['VALUE']}}</p>
+        <p>Likes: {{likes}}<form action="" method="POST"><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" type="submit" value="like" name="like"><i class="material-icons">plus_one</i></button></form></p>
+      </div>
+    </div>
+    <div class="mdl-cell card mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Comments</h2>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <table class="mdl-data-table mdl-js-data-table pending">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Time</th>
+              <th class="mdl-data-table__cell--non-numeric">User</th>
+              <th class="mdl-data-table__cell--non-numeric">Text</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for comment in comments %}
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric">{{comment['TIMESTAMP']}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{comment['NAME']}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{comment['TEXT']}}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mdl-cell card mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">New Comment</h2>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <form action="{{url('user_comment', {smid: tid['SMID'], tid: tid['TID'],id: tid['SMID']})}}" method="POST">
+          <div class="mdl-textfield mdl-js-textfield">
+            <textarea class="mdl-textfield__input" type="text" rows="3" value="comment_text" name="comment_text"></textarea>
+            <label class="mdl-textfield__label" for="comment_text">Text lines...</label>
+          </div>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="submit" name="submit">
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

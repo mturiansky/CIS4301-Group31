@@ -82,6 +82,7 @@ CREATE TABLE Makes
 create sequence seq_transaction minvalue 1 start with 1 increment by 1 cache 10;
 create sequence seq_sm minvalue 1 start with 1 increment by 1 cache 10;
 create sequence seq_account minvalue 1337 start with 1337 increment by 13 cache 10;
+create sequence seq_reply minvalue 1 start with 1 increment by 1 cache 10;
 
 -- drop table Makes;
 -- drop table Posts;
@@ -94,4 +95,5 @@ create sequence seq_account minvalue 1337 start with 1337 increment by 13 cache 
 -- drop sequence seq_transaction;
 -- drop sequence seq_sm;
 -- drop sequence seq_account;
+-- drop sequence seq_reply;
 

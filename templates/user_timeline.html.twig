@@ -1,0 +1,47 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+  <style>
+    .card {
+      width: 100%;
+      margin: auto;
+    }
+
+    .pending {
+      margin: auto;
+    }
+  </style>
+  <div class="page-content">
+    <div class="mdl-cell card mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">{{name}}'s Social Media Timeline</h2>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <table class="mdl-data-table mdl-js-data-table pending">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Time</th>
+              <th class="mdl-data-table__cell--non-numeric">From</th>
+              <th class="mdl-data-table__cell--non-numeric">To</th>
+              <th>Value</th>
+              <th class="mdl-data-table__cell--non-numeric">Text</th>
+              <th class="mdl-data-table__cell--non-numeric">View</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for post in posts %}
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric">{{post['TSTAMP']}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{post['FROMNAME']}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{post['TONAME']}}</td>
+              <td>{{post['VALUE']}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{post['TEXT']}}</td>
+              <td class="mdl-data-table__cell--non-numeric"><a href="{{url('user_timeline_id', {id: post['TID']})}}">View</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
