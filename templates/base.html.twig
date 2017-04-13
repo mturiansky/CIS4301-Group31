@@ -50,6 +50,7 @@
             <a class="mdl-navigation__link" href="{{ url('login') }}">Login</a>
           {% elseif global.user.username == 'admin' %}
             <a class="mdl-navigation__link" href="{{ url('admin_home') }}">Admin</a>
+            <a class="mdl-navigation__link" href="{{ url('admin_search') }}">Search</a>
             <a class="mdl-navigation__link" href="{{ url('admin_logout') }}">Logout</a>
           {% else %}
             <a class="mdl-navigation__link" href="{{ url('user_logout') }}">Logout</a>

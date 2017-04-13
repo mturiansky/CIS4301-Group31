@@ -155,11 +155,16 @@ $app->get('/user/{id}', function ($id) use ($app) {
         $user = $token->getUser();
         $name = $app['db']->fetchAssoc("select name, id from account where email_address = '$user'");
         $friends = $app['db']->fetchAssoc("select account.name from is_friends_with, account where friend1 = account.id and friend1 = ? and friend2 = ?", array($id, $name['ID']));
-        if (!$friends)
+        if (!$friends && $name['ID'] != 1337)
             return $app->redirect('/user');
 
         $posts = $app['db']->fetchAll("select * from (select social_media_post.id, social_media_post.timestamp, text from social_media_post, account, makes where social_media_post.id = makes.smid and (makes.fromacc = account.id or makes.toacc = account.id) and account.id = ? order by timestamp desc) where rownum <= 10", array($id));
-		$username = $friends['NAME'];
+        if ($friends)
+            $username = $friends['NAME'];
+        else {
+            $fname = $app['db']->fetchAssoc("select name from account where id = $id");
+            $username = $fname['NAME'];
+        }
         return $app['twig']->render('user_profile.html.twig', array(
             "username" => $username,
             "posts" => $posts

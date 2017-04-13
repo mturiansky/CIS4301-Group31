@@ -42,7 +42,7 @@
             <tbody>
             {% for r in results %}
               <tr>
-                <td>{{r['ID']}}</td>
+                <td><a href="{{url('user_profile', {id: r['ID']})}}">{{r['ID']}}</a></td>
                 <td class="mdl-data-table__cell--non-numeric">{{r['NAME']}}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{r['EMAIL_ADDRESS']}}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{r['DOB']}}</td>
