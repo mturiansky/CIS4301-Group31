@@ -25,4 +25,22 @@
     
   </tbody>
 </table>
+<h1>Possible Friends for {{userID['NAME']}}</h1>
+<table class="mdl-data-table mdl-js-data-table">
+  <thead>
+    <tr>
+      <th class="mdl-data-table__cell--non-numeric">Name</th>
+      <th>Friends in Common</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for friend in possibleFriends %}
+ <tr>
+      <td class="mdl-data-table__cell--non-numeric">{{friend['NAME']}}</td>
+      <td>{{friend['COUNT']}}</td>
+   </tr>
+{% endfor %}
+    
+  </tbody>
+</table>
 {% endblock %}

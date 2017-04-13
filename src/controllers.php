@@ -68,18 +68,18 @@ $app->get('/admin/search', function (Request $req) use ($app) {
 
 // user home page
 $app->get('/user', function () use ($app) {
-$token = $app['security.token_storage']->getToken();
-if (null !== $token) {
-    $user = $token->getUser();
-}
+    $token = $app['security.token_storage']->getToken();
+    if (null !== $token) {
+        $user = $token->getUser();
+    }
     $topTen= $app['db']->fetchAll("select * from (select timestamp, type, value, ID from Transaction, Makes where (fromacc = 1337 or toacc= 1337) and transaction.id=makes.tid order by timestamp desc) where rownum <=10");
-    $userID= $app['db'] -> fetchAssoc("select name from account where email_address = '$user'");
-	   
-return $app['twig']->render('user.html.twig', array(
-	
-	"topTen" => $topTen,
-	"userID" => $userID
-	));
+    $userID= $app['db'] -> fetchAssoc("select id,name from account where email_address = '$user'");
+    $possibleFriends = $app['db']->fetchAll("select * from (select name, count(*) as count from is_friends_with ifw1, is_friends_with ifw2, account where ifw2.friend2 = account.id and ifw1.friend1 != ifw2.friend2 and ifw1.friend2 = ifw2.friend1 and ifw1.friend1 = ? and ifw2.friend2 not in (select friend2 from is_friends_with where friend1 = ?) group by name order by count(*) desc) where rownum <= 10", array($userID['ID'], $userID['ID']));
+    return $app['twig']->render('user.html.twig', array(
+        "topTen" => $topTen,
+        "userID" => $userID,
+        "possibleFriends" => $possibleFriends,
+    ));
 })->bind('user_home');
 
 // user timeline
