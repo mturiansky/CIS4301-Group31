@@ -31,8 +31,10 @@
           <nav class="mdl-navigation mdl-layout--large-screen-only">
             {% if not global.user %}
               <a class="mdl-navigation__link" href="{{ url('login') }}">Login</a>
-            {% else %}
+            {% elseif global.user.username == 'admin' %}
               <a class="mdl-navigation__link" href="{{ url('admin_logout') }}">Logout</a>
+            {% else %}
+              <a class="mdl-navigation__link" href="{{ url('user_logout') }}">Logout</a>
             {% endif %}
           </nav>
         </div>
@@ -46,8 +48,10 @@
           <a class="mdl-navigation__link"  href="{{ url('user_timeline')}}">Timeline</a>
           {% if not global.user %}
             <a class="mdl-navigation__link" href="{{ url('login') }}">Login</a>
-          {% else %}
+          {% elseif global.user.username == 'admin' %}
             <a class="mdl-navigation__link" href="{{ url('admin_logout') }}">Logout</a>
+          {% else %}
+            <a class="mdl-navigation__link" href="{{ url('user_logout') }}">Logout</a>
           {% endif %}
         </nav>
       </div>
