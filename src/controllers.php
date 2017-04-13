@@ -50,8 +50,20 @@ $app->get('/admin', function () use ($app) {
 })->bind('admin_home');
 
 // admin search page
-$app->get('/admin/search', function () use ($app) {
-    return $app['twig']->render('index.html.twig');
+$app->get('/admin/search', function (Request $req) use ($app) {
+    $qq = $req->query->get('q');
+    if ($qq) {
+        $results = $app['db']->fetchAll("select fromacc as id, pos-neg as money, name, email_address, dob, address_city, address_state from account,(select fromacc, sum(value) as neg from makes,transaction where makes.tid = transaction.id group by fromacc), (select toacc, sum(value) as pos from makes,transaction where makes.tid = transaction.id group by toacc) where fromacc = toacc and fromacc = account.id and fromacc != 1337 and (name like '%$qq%' or email_address like '%$qq%' or id like '%$qq%' or address_city like '%$qq%' or address_state like '%$qq%') order by id asc");
+        return $app['twig']->render('admin_search.html.twig', array(
+            'count' => count($results),
+            'results' => $results,
+        ));
+    } else {
+        return $app['twig']->render('admin_search.html.twig', array(
+            'count' => 0,
+            'results' => null,
+        ));
+    }
 })->bind('admin_search');
 
 // user home page
