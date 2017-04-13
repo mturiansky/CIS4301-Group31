@@ -74,9 +74,31 @@ $app->get('/user/timeline', function () use ($app) {
 })->bind('user_timeline');
 
 // user profile page
-
 $app->get('/user/{id}', function ($id) use ($app) {
-    return $app['twig']->render('index.html.twig');
+    $posts = null;
+    $app['monolog']->info('[/] pre-token check');
+    $token = $app['security.token_storage']->getToken();
+    if ($token !== null) {
+        $app['monolog']->info('[/] found a login');
+	if (!$app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+    	    $currentUserEmail = $token->getUser();
+	    $currentUserIDArray = $app['db']->fetchAssoc("select id, name from account where email_address = '$currentUserEmail'");
+	    $currentUserID = $currentUserIDArray['ID'];
+	    $profileUserFriendID = $app['db']->fetchAssoc("select id from account, is_friends_with where friend1 = '$id' and friend2 = '$currentUserID' and id = friend2");
+	    if (($currentUserID !== $id) && ($currentUserID !== $profileUserFriendID)) {
+	        //$app->abort(404);
+	        $app->redirect(url('user_home'));
+	    }
+	    else {
+	        $posts = $app['db']->fetchAll("select * from (select social_media_post.id, social_media_post.timestamp, text from social_media_post, account, makes where social_media_post.id = makes.smid and (makes.fromacc = account.id or makes.toacc = account.id) order by timestamp desc) where rownum <= 10");
+		$username = $currentUserIDArray['NAME'];
+ 	    }
+        }	
+    }
+    return $app['twig']->render('user_profile.html.twig', array(
+    	"username" => $username,
+	"posts" => $posts
+    ));
 })->bind('user_profile');
 
 // user edit page (can only view your own, or admin can view all)
