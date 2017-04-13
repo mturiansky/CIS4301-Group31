@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+<h1>{{username}}'s Most Recent Social Media Posts</h1>
+<table class="mdl-data-table mdl-js-data-table">
+  <thead>
+    <tr>
+      <th> Date/Time of Post</th>
+      <th> Content</th>
+      <th> Post ID</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for post in posts %}
+    <tr>
+      <td> {{post['TIMESTAMP']}}</td>
+      <td> {{post['TEXT']}}</td>
+      <td> {{post['ID']}}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}
