@@ -59,7 +59,18 @@ $app->get('/user', function () use ($app) {
 
 // user timeline
 $app->get('/user/timeline', function () use ($app) {
-    return $app['twig']->render('index.html.twig');
+    $token = $app['security.token_storage']->getToken();
+    if (null !== $token) {
+        $user = $token->getUser();
+        $name = $app['db']->fetchAssoc("select name, id from account where email_address = '$user'");
+        $posts = $app['db']->fetchAll("select a1.name as fromname,a2.name as toname,transaction.value as value, transaction.timestamp as tstamp, social_media_post.text as text from social_media_post,makes,transaction,account a1,account a2 where a1.id = makes.fromacc and a2.id = makes.toacc and social_media_post.id = makes.smid and makes.tid = transaction.id and (makes.fromacc in (select friend2 from is_friends_with where friend1 = ?) or makes.toacc in (select friend2 from is_friends_with where friend1 = ?)) order by transaction.timestamp desc", array($name['ID'],$name['ID']));
+        return $app['twig']->render('user_timeline.html.twig', array(
+            'name' => $name['NAME'],
+            'posts' => $posts,
+        ));
+    } else {
+        $app->abort(403);
+    }
 })->bind('user_timeline');
 
 // user profile page
