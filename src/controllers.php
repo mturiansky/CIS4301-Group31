@@ -35,6 +35,7 @@ $app->get('/admin', function () use ($app) {
     $friends = $app['db']->fetchAll("select * from (select friend1, count(distinct friend2) as count from is_friends_with group by friend1 order by count(distinct friend2) desc) where ROWNUM <= 10");
     $money = $app['db']->fetchAll("select * from (select fromacc, pos-neg as total from (select fromacc, sum(value) as neg from makes,transaction where makes.tid = transaction.id group by fromacc), (select toacc, sum(value) as pos from makes,transaction where makes.tid = transaction.id group by toacc) where fromacc = toacc and fromacc != 1337 order by pos-neg desc) where rownum <= 10");
     $year = $app['db']->fetchAll("select * from (select extract(year from dob) as year, avg(value) as avg from account,makes,transaction where account.id = makes.toacc and makes.tid = transaction.id and makes.toacc != 1337 and transaction.memo = 'Salary Payment' group by extract(year from dob) order by avg(value) desc) where rownum <= 10");
+    $count = $app['db']->fetchAssoc("select c0+c1+c2+c3+c4+c5+c6+c7 as tot from (select count(*) as c0 from account),(select count(*) as c1 from is_friends_with),(select count(*) as c2 from reply),(select count(*) as c3 from social_media_post),(select count(*) as c4 from likes),(select count(*) as c5 from transaction),(select count(*) as c6 from posts),(select count(*) as c7 from makes)");
     return $app['twig']->render('admin_home.html.twig', array(
         $avg_gender[0]["GENDER"].'Count' => $avg_gender[0]["AVG"],
         $avg_gender[1]["GENDER"].'Count' => $avg_gender[1]["AVG"],
@@ -44,6 +45,7 @@ $app->get('/admin', function () use ($app) {
         'pending' => $pending,
         'money' => $money,
         'years' => $year,
+        'count' => $count['TOT'],
     ));
 })->bind('admin_home');
 
